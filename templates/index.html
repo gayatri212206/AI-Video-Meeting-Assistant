@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video & Meeting Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600/20 p-2 rounded-xl text-indigo-400">
+                    <i class="fa-solid fa-microphone-lines text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white">AI Video Intelligence</h1>
+                    <p class="text-xs text-slate-400">Transcribe, summarize & chat with meetings</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+        
+        <!-- Left: Input Form Panel (4 cols) -->
+        <section class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-6 h-fit shadow-xl">
+            <h2 class="text-lg font-semibold mb-4 flex items-center gap-2 text-indigo-400">
+                <i class="fa-solid fa-sliders"></i> Input Configuration
+            </h2>
+
+            <form id="processForm" class="space-y-5">
+                <!-- Source Toggle -->
+                <div class="flex bg-slate-800 p-1 rounded-xl">
+                    <button type="button" id="tabYt" class="flex-1 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white transition">YouTube URL</button>
+                    <button type="button" id="tabFile" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition">Upload File</button>
+                </div>
+
+                <!-- YouTube Input -->
+                <div id="ytGroup">
+                    <label class="block text-sm text-slate-300 mb-1">YouTube Link</label>
+                    <input type="url" id="youtube_url" placeholder="https://youtube.com/watch?v=..." 
+                           class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white">
+                </div>
+
+                <!-- File Input (Hidden by default) -->
+                <div id="fileGroup" class="hidden">
+                    <label class="block text-sm text-slate-300 mb-1">Upload Audio / Video</label>
+                    <input type="file" id="media_file" accept="audio/*,video/*"
+                           class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-indigo-600 file:text-white">
+                </div>
+
+                <!-- Language Selection -->
+                <div>
+                    <label class="block text-sm text-slate-300 mb-1">Audio Language</label>
+                    <select id="language" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white">
+                        <option value="english">English</option>
+                        <option value="hinglish">Hinglish</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="spanish">Spanish</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
+                    <span>🚀 Start Processing</span>
+                </button>
+            </form>
+
+            <!-- Loading Spinner -->
+            <div id="loading" class="hidden mt-6 text-center space-y-3">
+                <div class="inline-block animate-spin text-indigo-500 text-3xl">
+                    <i class="fa-solid fa-circle-notch"></i>
+                </div>
+                <p class="text-sm text-slate-400">Processing audio & generating insights...<br><span class="text-xs text-slate-500">(This might take a minute)</span></p>
+            </div>
+        </section>
+
+        <!-- Right: Results & Chat Panel (8 cols) -->
+        <section class="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col min-h-[550px]">
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="m-auto text-center py-12 text-slate-500">
+                <i class="fa-solid fa-wand-magic-sparkles text-5xl mb-3 text-slate-700"></i>
+                <p class="text-base font-medium">No video processed yet.</p>
+                <p class="text-xs">Provide a YouTube link or file on the left to get started.</p>
+            </div>
+
+            <!-- Content View (Hidden initially) -->
+            <div id="resultsView" class="hidden flex-1 flex flex-col">
+                <!-- Title Header -->
+                <div class="border-b border-slate-800 pb-4 mb-4">
+                    <span class="text-xs uppercase tracking-wider text-indigo-400 font-bold">Processed Title</span>
+                    <h2 id="resTitle" class="text-xl font-bold text-white mt-1"></h2>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex gap-2 border-b border-slate-800 pb-2 overflow-x-auto text-sm">
+                    <button onclick="switchTab('summary')" class="tab-btn active px-3 py-1.5 rounded-lg bg-indigo-600 text-white" data-tab="summary">📋 Summary</button>
+                    <button onclick="switchTab('actions')" class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white" data-tab="actions">✅ Action Items</button>
+                    <button onclick="switchTab('decisions')" class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white" data-tab="decisions">🔑 Decisions</button>
+                    <button onclick="switchTab('questions')" class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white" data-tab="questions">❓ Questions</button>
+                    <button onclick="switchTab('transcript')" class="tab-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white" data-tab="transcript">📜 Transcript</button>
+                    <button onclick="switchTab('chat')" class="tab-btn px-3 py-1.5 rounded-lg text-indigo-400 font-semibold" data-tab="chat">💬 Chat with Video</button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div class="flex-1 py-4 text-slate-300 text-sm overflow-y-auto max-h-[500px]">
+                    <div id="tab-summary" class="tab-content whitespace-pre-wrap leading-relaxed"></div>
+                    <div id="tab-actions" class="tab-content hidden whitespace-pre-wrap leading-relaxed"></div>
+                    <div id="tab-decisions" class="tab-content hidden whitespace-pre-wrap leading-relaxed"></div>
+                    <div id="tab-questions" class="tab-content hidden whitespace-pre-wrap leading-relaxed"></div>
+                    <div id="tab-transcript" class="tab-content hidden whitespace-pre-wrap text-xs font-mono bg-slate-950 p-4 rounded-xl border border-slate-800"></div>
+
+                    <!-- Chat UI Panel -->
+                    <div id="tab-chat" class="tab-content hidden flex-col h-[450px]">
+                        <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 p-3 bg-slate-950 rounded-xl border border-slate-800 mb-3">
+                            <div class="p-3 bg-slate-900 rounded-xl text-xs text-slate-400 border border-slate-800">
+                                🤖 Hi! Ask me anything about this video or meeting.
+                            </div>
+                        </div>
+                        <form id="chatForm" class="flex gap-2">
+                            <input type="text" id="chatInput" placeholder="Ask a question..." 
+                                   class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 px-5 rounded-xl text-white">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- JS Logic -->
+    <script>
+        let currentSessionId = null;
+        let isYoutube = true;
+
+        // Toggle Buttons
+        const tabYt = document.getElementById('tabYt');
+        const tabFile = document.getElementById('tabFile');
+        const ytGroup = document.getElementById('ytGroup');
+        const fileGroup = document.getElementById('fileGroup');
+
+        tabYt.addEventListener('click', () => {
+            isYoutube = true;
+            tabYt.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white transition";
+            tabFile.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition";
+            ytGroup.classList.remove('hidden');
+            fileGroup.classList.add('hidden');
+        });
+
+        tabFile.addEventListener('click', () => {
+            isYoutube = false;
+            tabFile.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white transition";
+            tabYt.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition";
+            fileGroup.classList.remove('hidden');
+            ytGroup.classList.add('hidden');
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-indigo-600', 'text-white');
+                b.classList.add('text-slate-400');
+            });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400');
+                activeBtn.classList.add('bg-indigo-600', 'text-white');
+            }
+
+            const activeContent = document.getElementById(`tab-${tabName}`);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                if (tabName === 'chat') activeContent.classList.add('flex');
+            }
+        }
+
+        // Process Form Submit
+        document.getElementById('processForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const emptyState = document.getElementById('emptyState');
+            const resultsView = document.getElementById('resultsView');
+
+            const formData = new FormData();
+            formData.append('language', document.getElementById('language').value);
+
+            if (isYoutube) {
+                const url = document.getElementById('youtube_url').value;
+                if (!url) return alert("Please enter a YouTube URL");
+                formData.append('youtube_url', url);
+            } else {
+                const file = document.getElementById('media_file').files[0];
+                if (!file) return alert("Please select a file to upload");
+                formData.append('file', file);
+            }
+
+            submitBtn.disabled = true;
+            loading.classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/process', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (!res.ok) throw new Error(data.detail || "Processing failed");
+
+                currentSessionId = data.session_id;
+                document.getElementById('resTitle').innerText = data.title;
+                document.getElementById('tab-summary').innerText = data.summary;
+                document.getElementById('tab-actions').innerText = data.action_items;
+                document.getElementById('tab-decisions').innerText = data.key_decisions;
+                document.getElementById('tab-questions').innerText = data.open_questions;
+                document.getElementById('tab-transcript').innerText = data.transcript;
+
+                emptyState.classList.add('hidden');
+                resultsView.classList.remove('hidden');
+                switchTab('summary');
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        });
+
+        // Chat Form Submit
+        document.getElementById('chatForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const question = input.value.trim();
+            if (!question || !currentSessionId) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+
+            // Append User Message
+            chatMessages.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-indigo-600 text-white text-xs px-3.5 py-2.5 rounded-xl max-w-[80%]">
+                        ${question}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Append Loading indicator
+            const loadingMsgId = "loading-" + Date.now();
+            chatMessages.innerHTML += `
+                <div id="${loadingMsgId}" class="flex justify-start">
+                    <div class="bg-slate-800 text-slate-400 text-xs px-3.5 py-2.5 rounded-xl">
+                        Thinking...
+                    </div>
+                </div>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ session_id: currentSessionId, question: question })
+                });
+                const data = await res.json();
+                document.getElementById(loadingMsgId).remove();
+
+                chatMessages.innerHTML += `
+                    <div class="flex justify-start">
+                        <div class="bg-slate-800 text-slate-200 text-xs px-3.5 py-2.5 rounded-xl max-w-[80%] whitespace-pre-wrap border border-slate-700">
+                            ${data.answer}
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                document.getElementById(loadingMsgId).remove();
+                chatMessages.innerHTML += `<div class="text-red-400 text-xs">Error getting response.</div>`;
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    </script>
+</body>
+</html>
