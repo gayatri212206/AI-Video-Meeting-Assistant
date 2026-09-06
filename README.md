@@ -1,17 +1,15 @@
-# 🤖 AI Video Meeting Assistant
+#  AI Video Meeting Assistant
 
 > AI-powered meeting assistant for transcription, summarization, action items, key decisions, and RAG-based meeting chat.
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-RAG-green)](https://www.langchain.com/)
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Database-purple)](https://www.trychroma.com/)
-#  AI Video Meeting Assistant
 
-> **An AI-powered web application that transforms audio/video meetings into intelligent, structured, searchable, and actionable meeting reports.**
 
 The **AI Video Meeting Assistant** helps users save time by automatically transcribing meetings, generating summaries, extracting action items and key decisions, identifying open questions, and allowing users to **chat with their meeting content using Retrieval-Augmented Generation (RAG).**
 
-It supports **English, Hindi, and Hinglish** meetings and can also process **YouTube video URLs**.
+It supports **English, Hinglish** meetings and can also process **YouTube video URLs**.
 
 ---
 
