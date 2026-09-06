@@ -1,4 +1,4 @@
-# 🤖 AI Video Meeting Assistant
+#  AI Video Meeting Assistant
 
 > **An AI-powered web application that transforms audio/video meetings into intelligent, structured, searchable, and actionable meeting reports.**
 
@@ -71,26 +71,26 @@ The system uses **RAG + ChromaDB** to retrieve relevant sections of the meeting 
 
 ```text
                     ┌─────────────────────────┐
-                    │   🎥 Video / Audio      │
+                    │    Video / Audio      │
                     │      YouTube URL        │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │   🎵 Audio Processing   │
+                    │    Audio Processing   │
                     │        FFmpeg            │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │     📝 Transcription    │
+                    │      Transcription    │
                     │                         │
                     │  Whisper / Sarvam AI    │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │   🧠 Meeting Analysis   │
+                    │    Meeting Analysis   │
                     │                         │
                     │  • Summary              │
                     │  • Action Items         │
@@ -100,14 +100,14 @@ The system uses **RAG + ChromaDB** to retrieve relevant sections of the meeting 
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │      🔍 RAG Pipeline    │
+                    │       RAG Pipeline    │
                     │                         │
                     │ LangChain + ChromaDB    │
                     └────────────┬────────────┘
                                  │
                                  ▼
                     ┌─────────────────────────┐
-                    │     💬 Meeting Chat    │
+                    │      Meeting Chat    │
                     │                         │
                     │ Ask Questions & Get     │
                     │ Context-Aware Answers   │
