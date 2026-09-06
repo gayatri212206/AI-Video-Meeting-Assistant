@@ -1,235 +1,489 @@
-🤖 AI Video Meeting Assistant
+# 🤖 AI Video Meeting Assistant
 
-An AI-powered meeting assistant that converts audio/video meetings and YouTube videos into structured, searchable meeting reports.
+> **An AI-powered web application that transforms audio/video meetings into intelligent, structured, searchable, and actionable meeting reports.**
 
-The application can transcribe meetings, generate summaries, extract important information, and allow users to chat with their meeting content using RAG (Retrieval-Augmented Generation).
+The **AI Video Meeting Assistant** helps users save time by automatically transcribing meetings, generating summaries, extracting action items and key decisions, identifying open questions, and allowing users to **chat with their meeting content using Retrieval-Augmented Generation (RAG).**
 
-✨ Features
-🎥 Video & Audio Support
-Upload audio/video files
-Process YouTube video URLs
-📝 AI Transcription
-Local Whisper AI for English meetings
-Sarvam AI for Hindi & Hinglish transcription
-🧠 AI Meeting Summarization
-Automatically generates concise meeting summaries
-Generates a suitable title for the meeting
-✅ Action Items Extraction
-Identifies tasks discussed during the meeting
-Helps track what needs to be done
-📌 Key Decisions Extraction
-Extracts important decisions made during the meeting
-❓ Open Questions
-Identifies unanswered questions and discussion points
-💬 Chat with Your Meeting
-Ask questions about the meeting
-Uses RAG + ChromaDB to retrieve relevant information before generating answers
+It supports **English, Hindi, and Hinglish** meetings and can also process **YouTube video URLs**.
 
-How It Works
-              ┌──────────────────────┐
-              │   Video / Audio /    │
-              │     YouTube URL      │
-              └──────────┬───────────┘
-                         │
-                         ▼
-              ┌──────────────────────┐
-              │   Audio Processing   │
-              │      + FFmpeg        │
-              └──────────┬───────────┘
-                         │
-                         ▼
-              ┌──────────────────────┐
-              │     Transcription    │
-              │ Whisper / Sarvam AI  │
-              └──────────┬───────────┘
-                         │
-                         ▼
-              ┌──────────────────────┐
-              │   Meeting Analysis   │
-              │                      │
-              │ • Summary            │
-              │ • Action Items       │
-              │ • Key Decisions      │
-              │ • Questions          │
-              └──────────┬───────────┘
-                         │
-                         ▼
-              ┌──────────────────────┐
-              │     RAG Pipeline     │
-              │ LangChain + ChromaDB │
-              └──────────┬───────────┘
-                         │
-                         ▼
-              ┌──────────────────────┐
-              │   Ask Questions &    │
-              │   Chat with Meeting  │
-              └──────────────────────┘
+---
 
-              Tech Stack
+##  Features
 
-              AI / ML
-OpenAI Whisper
-Sarvam AI
-Mistral AI
+###  Audio & Video Support
+
+* Upload audio/video meeting files
+* Process YouTube video URLs
+* Extract audio automatically for transcription
+* FFmpeg-based audio/video processing
+
+###  AI-Powered Transcription
+
+* **Whisper AI** for English transcription
+* **Sarvam AI** for Hindi and Hinglish transcription
+* Converts meeting speech into searchable text
+
+###  Intelligent Meeting Summarization
+
+Automatically generates:
+
+*  Meeting title
+*  Concise meeting summary
+*  Important discussion points
+
+###  Action Items Extraction
+
+Automatically identifies:
+
+* Tasks discussed during the meeting
+* Assigned work
+* Important follow-up actions
+
+###  Key Decisions Extraction
+
+Extracts the major decisions made during the meeting so users don't have to go through the complete transcript.
+
+###  Open Questions
+
+Identifies:
+
+* Unanswered questions
+* Pending discussion points
+* Issues requiring further clarification
+
+###  Chat With Your Meeting
+
+Users can ask questions directly about their meeting.
+
+For example:
+
+> **What were the main decisions made?**
+
+> **What tasks were assigned to the team?**
+
+> **What questions are still unanswered?**
+
+The system uses **RAG + ChromaDB** to retrieve relevant sections of the meeting transcript before generating an answer.
+
+---
+
+#  How It Works
+
+```text
+                    ┌─────────────────────────┐
+                    │   🎥 Video / Audio      │
+                    │      YouTube URL        │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │   🎵 Audio Processing   │
+                    │        FFmpeg            │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │     📝 Transcription    │
+                    │                         │
+                    │  Whisper / Sarvam AI    │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │   🧠 Meeting Analysis   │
+                    │                         │
+                    │  • Summary              │
+                    │  • Action Items         │
+                    │  • Key Decisions        │
+                    │  • Open Questions       │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │      🔍 RAG Pipeline    │
+                    │                         │
+                    │ LangChain + ChromaDB    │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │     💬 Meeting Chat    │
+                    │                         │
+                    │ Ask Questions & Get     │
+                    │ Context-Aware Answers   │
+                    └─────────────────────────┘
+```
+
+---
+
+#  RAG Pipeline
+
+One of the main features of this project is the **Retrieval-Augmented Generation (RAG)** based meeting chat.
+
+Instead of sending the entire meeting transcript directly to the language model, the transcript is divided into smaller chunks and converted into vector embeddings.
+
+These embeddings are stored in **ChromaDB**, allowing the system to retrieve the most relevant parts of the meeting when the user asks a question.
+
+```text
+Meeting Transcript
+        │
+        ▼
+   Text Chunking
+        │
+        ▼
 Hugging Face Embeddings
-RAG
-LangChain
-ChromaDB
-Retrieval-Augmented Generation (RAG)
-Audio / Video Processing
-FFmpeg
-yt-dlp
-Pydub
+        │
+        ▼
+    ChromaDB
+ Vector Database
+        │
+        ▼
+  Similarity Search
+        │
+        ▼
+ Relevant Context
+        │
+        ▼
+    Mistral LLM
+        │
+        ▼
+   AI-Generated Answer
+```
 
-Installation
-Step 1: Open Terminal and Navigate to the Project Folder
-Open your terminal (or VS Code integrated terminal) and navigate to the directory where your server.py file is located:
-code
-Bash
-cd path/to/your/project-folder
-(If server.py is inside a backend folder, run cd backend).
-Step 2: Create & Activate a Virtual Environment (Recommended)
-If you haven't created a virtual environment yet, create one:
-code
-Bash
+### Why RAG?
+
+RAG makes it possible to ask questions about long meeting transcripts without manually searching through the entire conversation.
+
+For example:
+
+```text
+User:
+"What did the team decide about the project deadline?"
+
+             ↓
+
+RAG retrieves the relevant transcript section
+
+             ↓
+
+Mistral LLM generates the answer
+
+             ↓
+
+Answer:
+"The team decided to complete the project by..."
+```
+
+---
+
+# 🛠️ Tech Stack
+
+##  Programming
+
+* Python
+
+##  Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+
+## 🤖 AI / ML
+
+* OpenAI Whisper
+* Sarvam AI
+* Mistral AI
+* Hugging Face Embeddings
+
+## 🔍 RAG & Vector Database
+
+* LangChain
+* ChromaDB
+* Retrieval-Augmented Generation (RAG)
+
+## 🎵 Audio / Video Processing
+
+* FFmpeg
+* yt-dlp
+* Pydub
+
+
+---
+
+#  Application Workflow
+
+### Step 1 — Provide Meeting Input
+
+Upload an audio/video file or provide a YouTube video URL.
+
+### Step 2 — Audio Processing
+
+The application processes the input and extracts the required audio using FFmpeg and related tools.
+
+### Step 3 — Transcription
+
+The system automatically converts speech into text using the appropriate transcription technology.
+
+### Step 4 — Meeting Analysis
+
+The AI analyzes the transcript and generates:
+
+* Meeting Title
+* Summary
+* Action Items
+* Key Decisions
+* Open Questions
+
+### Step 5 — Build RAG Knowledge Base
+
+The transcript is chunked, embedded, and stored in ChromaDB.
+
+### Step 6 — Ask Questions
+
+Users can interact with the meeting through the chat interface and receive context-aware answers.
+
+---
+
+#  Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/gayatri212206/AI-Video-Meeting-Assistant.git
+```
+
+Move into the project directory:
+
+```bash
+cd AI-Video-Meeting-Assistant
+```
+
+---
+
+## 2. Create a Virtual Environment
+
+Creating a virtual environment is recommended.
+
+### Windows
+
+```bash
 python -m venv venv
-Now, activate it:
-Windows (Command Prompt / PowerShell):
-code
-Bash
+```
+
+Activate it:
+
+```bash
 venv\Scripts\activate
-(If you get a script execution policy error in PowerShell, run: Set-ExecutionPolicy Unrestricted -Scope Process first).
-macOS / Linux:
-code
-Bash
+```
+
+If you are using PowerShell and encounter an execution-policy error:
+
+```powershell
+Set-ExecutionPolicy Unrestricted -Scope Process
+```
+
+Then activate the environment again:
+
+```bash
+venv\Scripts\activate
+```
+
+### macOS / Linux
+
+```bash
+python3 -m venv venv
+```
+
+```bash
 source venv/bin/activate
-(Once activated, you will see (venv) at the beginning of your terminal prompt).
-Step 3: Install Required Dependencies
-Install the necessary packages listed in your requirements.txt:
-code
-Bash
+```
+
+After activation, you should see:
+
+```text
+(venv)
+```
+
+at the beginning of your terminal prompt.
+
+---
+
+# 📦 Install Dependencies
+
+Install all required Python packages:
+
+```bash
 pip install -r requirements.txt
-(If you don't have a requirements.txt file, install the standard packages manually, e.g.: pip install fastapi uvicorn openai python-dotenv or pip install flask flask-cors).
-Step 4: Set Up the .env File (API Keys)
-Create a .env file in the same directory as server.py and add your required keys and configuration:
-code
-Env
-OPENAI_API_KEY=your_actual_api_key_here
-PORT=8000
-Step 5: Run server.py
-Depending on how your server code is written, choose one of the following methods:
-Method 1: Direct Python Execution (For Flask or standard scripts)
-code
-Bash
-python server.py
-Method 2: Using Uvicorn (For FastAPI applications)
-code
-Bash
-uvicorn server:app --reload --port 8000
-(Here, server refers to server.py, and app refers to the FastAPI application instance).
-Step 6: Verify the Server is Running
-You should see output in the terminal similar to:
-code
-Text
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-Test it in your browser:
-Base URL: http://localhost:8000 (or http://localhost:5000)
-API Documentation (FastAPI): http://localhost:8000/docs
-⚠️ Common Errors & Fixes:
-ModuleNotFoundError: No module named '...'
-👉 Install the missing module directly: pip install <module_name>.
-Address already in use / Port busy
-👉 Change the port when running: uvicorn server:app --reload --port 8080 or terminate the process running on that port.
-FFmpeg not found
-👉 If your assistant processes audio/video files, make sure FFmpeg is installed on your operating system and added to your system's PATH.
+```
 
-Environment Variables
+If `pip` is unavailable, use:
 
-Create a .env file in the project root:
+```bash
+python -m pip install -r requirements.txt
+```
 
+---
+
+# 🎵 Install FFmpeg
+
+FFmpeg is required for processing audio and video files.
+
+Verify the installation:
+
+```bash
+ffmpeg -version
+```
+
+If the FFmpeg version information appears in the terminal, FFmpeg is installed correctly.
+
+### ⚠️ FFmpeg Not Found?
+
+If you get:
+
+```text
+ffmpeg is not recognized as the name of a cmdlet
+```
+
+make sure FFmpeg is installed and its `bin` directory has been added to the system **PATH**.
+
+---
+
+# 🔑 Environment Variables
+
+The project uses API keys for AI services.
+
+Create a `.env` file in the project root:
+
+```env
 MISTRAL_API_KEY=your_mistral_api_key
 SARVAM_API_KEY=your_sarvam_api_key
+```
 
-Usage
-Step 1 — Provide Meeting Input
 
-Upload an audio/video file or provide a YouTube URL.
 
-Step 2 — Transcription
+# ▶️ Running the Project
 
-The system extracts the audio and converts the speech into text.
+Start the Python backend according to the project's backend entry file.
 
-Step 3 — Meeting Analysis
+For example:
 
-The AI generates:
+```bash
+python server.py
+```
 
-Meeting title
-Summary
-Action items
-Key decisions
-Open questions
-Step 4 — Chat with Meeting
+or:
 
-Ask questions such as:
+```bash
+python main.py
+```
 
-What were the main decisions made?
-What tasks were assigned to the team?
+Then open the frontend:
+
+```text
+index.html
+```
+
+in your browser.
+
+> Use the backend command corresponding to the entry file in your current project.
+
+---
+
+# 💡 Example Questions
+
+After processing a meeting, users can ask questions such as:
+
+```text
+What were the main decisions made in the meeting?
+```
+
+```text
+What tasks were assigned to each team member?
+```
+
+```text
+What is the project deadline?
+```
+
+```text
+What problems were discussed?
+```
+
+```text
 What questions remain unanswered?
+```
 
-The RAG pipeline retrieves relevant sections from the meeting transcript before generating the answer.
+```text
+Summarize the discussion about the project.
+```
 
-RAG Pipeline
+---
 
-The meeting transcript is divided into smaller chunks and converted into vector embeddings.
+# 🎯 Use Cases
 
-Meeting Transcript
-        ↓
-Text Chunking
-        ↓
-Hugging Face Embeddings
-        ↓
-ChromaDB Vector Store
-        ↓
-Similarity Search
-        ↓
-Relevant Context
-        ↓
-Mistral LLM
-        ↓
-AI Answer
+The AI Video Meeting Assistant can be useful for:
 
-This allows users to ask questions about long meetings without manually searching through the entire transcript.
+*  Business meetings
+*  Software development meetings
+*  College project meetings
+*  Lectures and educational sessions
+*  Team discussions
+*  Interviews
+*  YouTube video analysis
+*  Meeting documentation
 
-Future Improvements
+---
 
-Speaker identification / diarization
+# 🌟 Key Benefits
 
-Multi-language UI
+###  Saves Time
 
-DOCX export
+Users don't need to watch or read an entire meeting to understand what happened.
 
-Automatic meeting action-item tracking
+###  Automated Analysis
 
-Calendar integration
+Important information is extracted automatically from the transcript.
 
-User authentication
+###  Searchable Knowledge
 
-Meeting history and dashboard
+RAG allows users to retrieve relevant information from the meeting.
 
-Fully local LLM option
+###  Interactive
 
-Improved real-time meeting transcription
+Instead of simply reading a summary, users can ask questions and interact with the meeting content.
 
 
- Author
 
-Gayatri Mohite
+---
 
-B.Sc. Computer Science Student
+# 🔮 Future Improvements
+
+* [ ] Speaker identification / diarization
+* [ ] Real-time meeting transcription
+* [ ] Multi-language UI
+* [ ] DOCX report export
+* [ ] Automatic action-item tracking
+* [ ] Calendar integration
+* [ ] User authentication
+* [ ] Meeting history and dashboard
+* [ ] Fully local LLM support
+* [ ] Improved real-time processing
+* [ ] Speaker-wise meeting summaries
+
+---
+
+# 👩‍💻 Author
+
+### Gayatri Mohite
+
+**B.Sc. Computer Science Student**
+
+🔗 **GitHub:**
 https://github.com/gayatri212206
 
 
+---
 
- License
+# 📜 License
 
-This project is created for educational and project-development purposes.
+This project is created for **educational and project-development purposes**.
