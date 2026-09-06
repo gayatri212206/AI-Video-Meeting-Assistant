@@ -476,6 +476,9 @@ Instead of simply reading a summary, users can ask questions and interact with t
 * [ ] Speaker-wise meeting summaries
 
 ---
+# Demo
+https://drive.google.com/file/d/1NDwIBdCUDCFgAwrBAYtEHOUanyr8DxUC/view?usp=sharing
+
 
 # 👩‍💻 Author
 
