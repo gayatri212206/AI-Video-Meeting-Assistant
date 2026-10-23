@@ -313,7 +313,7 @@ at the beginning of your terminal prompt.
 
 ---
 
-# 📦 Install Dependencies
+#  Install Dependencies
 
 Install all required Python packages:
 
@@ -329,7 +329,7 @@ python -m pip install -r requirements.txt
 
 ---
 
-# 🎵 Install FFmpeg
+#  Install FFmpeg
 
 FFmpeg is required for processing audio and video files.
 
@@ -341,7 +341,7 @@ ffmpeg -version
 
 If the FFmpeg version information appears in the terminal, FFmpeg is installed correctly.
 
-### ⚠️ FFmpeg Not Found?
+###  FFmpeg Not Found?
 
 If you get:
 
@@ -353,7 +353,7 @@ make sure FFmpeg is installed and its `bin` directory has been added to the syst
 
 ---
 
-# 🔑 Environment Variables
+#  Environment Variables
 
 The project uses API keys for AI services.
 
@@ -366,7 +366,7 @@ SARVAM_API_KEY=your_sarvam_api_key
 
 
 
-# ▶️ Running the Project
+#  Running the Project
 
 Start the Python backend according to the project's backend entry file.
 
@@ -394,7 +394,7 @@ in your browser.
 
 ---
 
-# 💡 Example Questions
+#  Example Questions
 
 After processing a meeting, users can ask questions such as:
 
@@ -424,7 +424,7 @@ Summarize the discussion about the project.
 
 ---
 
-# 🎯 Use Cases
+#  Use Cases
 
 The AI Video Meeting Assistant can be useful for:
 
@@ -439,7 +439,7 @@ The AI Video Meeting Assistant can be useful for:
 
 ---
 
-# 🌟 Key Benefits
+#  Key Benefits
 
 ###  Saves Time
 
@@ -461,7 +461,7 @@ Instead of simply reading a summary, users can ask questions and interact with t
 
 ---
 
-# 🔮 Future Improvements
+#  Future Improvements
 
 * [ ] Speaker identification / diarization
 * [ ] Real-time meeting transcription
@@ -480,13 +480,13 @@ Instead of simply reading a summary, users can ask questions and interact with t
 https://drive.google.com/file/d/1NDwIBdCUDCFgAwrBAYtEHOUanyr8DxUC/view?usp=sharing
 
 
-# 👩‍💻 Author
+#  Author
 
 ### Gayatri Mohite
 
 **B.Sc. Computer Science Student**
 
-🔗 **GitHub:**
+ **GitHub:**
 https://github.com/gayatri212206
 
 
